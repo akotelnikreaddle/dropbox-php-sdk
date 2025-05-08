@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Http\Clients;
 
 use InvalidArgumentException;
@@ -12,11 +15,9 @@ class DropboxHttpClientFactory
     /**
      * Make HTTP Client
      *
-     * @param  \Kunnu\Dropbox\Http\Clients\DropboxHttpClientInterface|\GuzzleHttp\Client|null $handler
-     *
-     * @return \Kunnu\Dropbox\Http\Clients\DropboxHttpClientInterface
+     * @param DropboxHttpClientInterface|\GuzzleHttp\Client|null $handler
      */
-    public static function make($handler)
+    public static function make($handler): DropboxGuzzleHttpClient|DropboxHttpClientInterface
     {
         //No handler specified
         if (!$handler) {

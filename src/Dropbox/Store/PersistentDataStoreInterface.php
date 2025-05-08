@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Store;
 
 interface PersistentDataStoreInterface
@@ -22,7 +25,7 @@ interface PersistentDataStoreInterface
     /**
      * Clear the key from the store
      *
-     * @param $key Data Key
+     * @param string $key Data Key
      *
      * @return void
      */

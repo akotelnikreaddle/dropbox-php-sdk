@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class AccountList extends ModelCollection
@@ -22,7 +25,7 @@ class AccountList extends ModelCollection
      *
      * @return array Array of Account models
      */
-    protected function processItems(array $items)
+    protected function processItems(array $items): array
     {
         $processedItems = [];
 

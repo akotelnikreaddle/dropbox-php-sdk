@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class AccessToken extends BaseModel
@@ -61,8 +64,6 @@ class AccessToken extends BaseModel
 
     /**
      * Create a new AccessToken instance
-     *
-     * @param array $data
      */
     public function __construct(array $data)
     {
@@ -100,10 +101,8 @@ class AccessToken extends BaseModel
 
     /**
      * Get the expiry time
-     *
-     * @return int
      */
-    public function getExpiryTime()
+    public function getExpiryTime(): int
     {
         return (int) $this->expiryTime;
     }

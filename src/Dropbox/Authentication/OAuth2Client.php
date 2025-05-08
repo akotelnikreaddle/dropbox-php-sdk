@@ -1,6 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Authentication;
 
+use Kunnu\Dropbox\Exceptions\DropboxClientException;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\DropboxClient;
 use Kunnu\Dropbox\DropboxRequest;
@@ -24,49 +28,32 @@ class OAuth2Client
     const AUTH_TOKEN_URL = "https://api.dropboxapi.com/oauth2/token";
 
     /**
-     * The Dropbox App
-     *
-     * @var \Kunnu\Dropbox\DropboxApp
-     */
-    protected $app;
-
-    /**
-     * The Dropbox Client
-     *
-     * @var \Kunnu\Dropbox\DropboxClient
-     */
-    protected $client;
-
-    /**
-     * Random String Generator
-     *
-     * @var \Kunnu\Dropbox\Security\RandomStringGeneratorInterface
-     */
-    protected $randStrGenerator;
-
-    /**
      * Create a new DropboxApp instance
-     *
-     * @param \Kunnu\Dropbox\DropboxApp $app
-     * @param \Kunnu\Dropbox\DropboxClient $client
-     * @param \Kunnu\Dropbox\Security\RandomStringGeneratorInterface $randStrGenerator
      */
-    public function __construct(DropboxApp $app, DropboxClient $client, RandomStringGeneratorInterface $randStrGenerator = null)
+    public function __construct(
+        /**
+         * The Dropbox App
+         */
+        protected DropboxApp $app,
+        /**
+         * The Dropbox Client
+         */
+        protected DropboxClient $client,
+        /**
+         * Random String Generator
+         */
+        protected ?RandomStringGeneratorInterface $randStrGenerator = null
+    )
     {
-        $this->app = $app;
-        $this->client = $client;
-        $this->randStrGenerator = $randStrGenerator;
     }
 
     /**
      * Build URL
      *
-     * @param  string $endpoint
      * @param  array  $params   Query Params
      *
-     * @return string
      */
-    protected function buildUrl($endpoint = '', array $params = [])
+    protected function buildUrl(string $endpoint = '', array $params = []): string
     {
         $queryParams = http_build_query($params, '', '&');
         return static::BASE_URL . $endpoint . '?' . $queryParams;
@@ -75,7 +62,7 @@ class OAuth2Client
     /**
      * Get the Dropbox App
      *
-     * @return \Kunnu\Dropbox\DropboxApp
+     * @return DropboxApp
      */
     public function getApp()
     {
@@ -85,7 +72,7 @@ class OAuth2Client
     /**
      * Get the Dropbox Client
      *
-     * @return \Kunnu\Dropbox\DropboxClient
+     * @return DropboxClient
      */
     public function getClient()
     {
@@ -132,9 +119,9 @@ class OAuth2Client
      * @param  string $grant_type Grant Type ['authorization_code' | 'refresh_token']
      *
      * @return array
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
-    public function getAccessToken($code, $redirectUri = null, $grant_type = 'authorization_code')
+    public function getAccessToken($code, $redirectUri = null, $grant_type = 'authorization_code'): mixed
     {
         //Request Params
         $params = [
@@ -177,10 +164,9 @@ class OAuth2Client
     /**
      * Disables the access token
      *
-     * @return void
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
-    public function revokeAccessToken()
+    public function revokeAccessToken(): void
     {
         //Access Token
         $accessToken = $this->getApp()->getAccessToken();

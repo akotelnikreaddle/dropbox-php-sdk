@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class FileSharingInfo extends BaseModel
@@ -28,8 +31,6 @@ class FileSharingInfo extends BaseModel
 
     /**
      * Create a new File Sharing Info instance
-     *
-     * @param array $data
      */
     public function __construct(array $data)
     {

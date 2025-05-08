@@ -1,24 +1,22 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class BaseModel implements ModelInterface
 {
 
     /**
-     * Model Data
-     *
-     * @var array
-     */
-    protected $data;
-
-    /**
      * Create a new Model instance
-     *
-     * @param array $data
      */
-    public function __construct(array $data)
+    public function __construct(
+        /**
+         * Model Data
+         */
+        protected array $data
+    )
     {
-        $this->data = $data;
     }
 
     /**
@@ -40,7 +38,7 @@ class BaseModel implements ModelInterface
      */
     public function getDataProperty($property)
     {
-        return isset($this->data[$property]) ? $this->data[$property] : null;
+        return $this->data[$property] ?? null;
     }
 
     /**
@@ -69,8 +67,6 @@ class BaseModel implements ModelInterface
      *
      * @param  string $property
      * @param  string $value
-     *
-     * @return mixed|null
      */
     public function __set($property, $value)
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class ModelFactory
@@ -10,9 +12,9 @@ class ModelFactory
      *
      * @param  array $data Model Data
      *
-     * @return \Kunnu\Dropbox\Models\ModelInterface
+     * @return ModelInterface
      */
-    public static function make(array $data = array())
+    public static function make(array $data = []): FileMetadata|FolderMetadata|TemporaryLink|MetadataCollection|SearchResults|DeletedMetadata|BaseModel
     {
         if (static::isFileOrFolder($data)) {
             $tag = $data['.tag'];
@@ -52,72 +54,43 @@ class ModelFactory
         return new BaseModel($data);
     }
 
-    /**
-     * @param array $data
-     *
-     * @return bool
-     */
-    protected static function isFileOrFolder(array $data)
+    protected static function isFileOrFolder(array $data): bool
     {
         return isset($data['.tag']) && isset($data['id']);
     }
 
     /**
      * @param string $tag
-     *
-     * @return bool
      */
-    protected static function isFile($tag)
+    protected static function isFile($tag): bool
     {
         return $tag === 'file';
     }
 
     /**
      * @param string $tag
-     *
-     * @return bool
      */
-    protected static function isFolder($tag)
+    protected static function isFolder($tag): bool
     {
         return $tag === 'folder';
     }
 
-    /**
-     * @param array $data
-     *
-     * @return bool
-     */
-    protected static function isTemporaryLink(array $data)
+    protected static function isTemporaryLink(array $data): bool
     {
         return isset($data['metadata']) && isset($data['link']);
     }
 
-    /**
-     * @param array $data
-     *
-     * @return bool
-     */
-    protected static function isList(array $data)
+    protected static function isList(array $data): bool
     {
         return isset($data['entries']);
     }
 
-    /**
-     * @param array $data
-     *
-     * @return bool
-     */
-    protected static function isSearchResult(array $data)
+    protected static function isSearchResult(array $data): bool
     {
         return isset($data['matches']);
     }
 
-    /**
-     * @param array $data
-     *
-     * @return bool
-     */
-    protected static function isDeletedFileOrFolder(array $data)
+    protected static function isDeletedFileOrFolder(array $data): bool
     {
         return !isset($data['.tag']) || !isset($data['id']);
     }

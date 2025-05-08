@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class FileMetadata extends BaseModel
@@ -51,14 +54,14 @@ class FileMetadata extends BaseModel
     /**
      * Additional information if the file is a photo or video.
      *
-     * @var \Kunnu\Dropbox\Models\MediaInfo
+     * @var MediaInfo
      */
     protected $media_info;
 
     /**
      * Set if this file is contained in a shared folder.
      *
-     * @var \Kunnu\Dropbox\Models\FileSharingInfo
+     * @var FileSharingInfo
      */
     protected $sharing_info;
 
@@ -100,8 +103,6 @@ class FileMetadata extends BaseModel
 
     /**
      * Create a new FileMetadata instance
-     *
-     * @param array $data
      */
     public function __construct(array $data)
     {
@@ -193,7 +194,7 @@ class FileMetadata extends BaseModel
     /**
      * Get the 'media_info' property of the file model.
      *
-     * @return \Kunnu\Dropbox\Models\MediaInfo
+     * @return MediaInfo
      */
     public function getMediaInfo()
     {
@@ -203,7 +204,7 @@ class FileMetadata extends BaseModel
     /**
      * Get the 'sharing_info' property of the file model.
      *
-     * @return \Kunnu\Dropbox\Models\FileSharingInfo
+     * @return FileSharingInfo
      */
     public function getSharingInfo()
     {

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class MetadataCollection extends BaseModel
@@ -27,17 +30,15 @@ class MetadataCollection extends BaseModel
 
     /**
      * Collection Data
-     *
-     * @var array
      */
-    protected $data;
+    protected array $data;
 
     /**
      * List of Files/Folder Metadata
      *
-     * @var \Kunnu\Dropbox\Models\ModelCollection
+     * @var ModelCollection
      */
-    protected $items = null;
+    protected $items;
 
     /**
      * Cursor for pagination and updates
@@ -48,10 +49,8 @@ class MetadataCollection extends BaseModel
 
     /**
      * If more items are available
-     *
-     * @var boolean
      */
-    protected $hasMoreItems;
+    protected bool $hasMoreItems;
 
     /**
      * Create a new Metadata Collection
@@ -62,10 +61,10 @@ class MetadataCollection extends BaseModel
     {
         parent::__construct($data);
 
-        $this->cursor = isset($data[$this->getCollectionCursorKey()]) ? $data[$this->getCollectionCursorKey()] : '';
-        $this->hasMoreItems = isset($data[$this->getCollectionHasMoreItemsKey()]) && $data[$this->getCollectionHasMoreItemsKey()] ? true : false;
+        $this->cursor = $data[$this->getCollectionCursorKey()] ?? '';
+        $this->hasMoreItems = isset($data[$this->getCollectionHasMoreItemsKey()]) && $data[$this->getCollectionHasMoreItemsKey()];
 
-        $items = isset($data[$this->getCollectionItemsKey()]) ? $data[$this->getCollectionItemsKey()] : [];
+        $items = $data[$this->getCollectionItemsKey()] ?? [];
         $this->processItems($items);
     }
 
@@ -102,7 +101,7 @@ class MetadataCollection extends BaseModel
     /**
      * Get the Items
      *
-     * @return \Kunnu\Dropbox\Models\ModelCollection
+     * @return ModelCollection
      */
     public function getItems()
     {

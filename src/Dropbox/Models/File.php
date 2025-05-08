@@ -1,43 +1,39 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
+use Kunnu\Dropbox\Exceptions\DropboxClientException;
 use Kunnu\Dropbox\DropboxFile;
 
 class File extends BaseModel
 {
 
     /**
-     * The file contents
-     *
-     * @var string|DropboxFile
-     */
-    protected $contents;
-
-    /**
      * File Metadata
-     *
-     * @var \Kunnu\Dropbox\Models\FileMetadata
      */
-    protected $metadata;
+    protected FileMetadata $metadata;
 
 
     /**
      * Create a new File instance
      *
-     * @param array  $data
      * @param string|DropboxFile $contents
      */
-    public function __construct(array $data, $contents)
+    public function __construct(array $data, /**
+     * The file contents
+     */
+    protected $contents)
     {
         parent::__construct($data);
-        $this->contents = $contents;
         $this->metadata = new FileMetadata($data);
     }
 
     /**
      * The metadata for the file
      *
-     * @return \Kunnu\Dropbox\Models\FileMetadata
+     * @return FileMetadata
      */
     public function getMetadata()
     {
@@ -48,13 +44,14 @@ class File extends BaseModel
      * Get the file contents
      *
      * @return string
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
     public function getContents()
     {
         if ($this->contents instanceof DropboxFile) {
             return $this->contents->getContents();
         }
+
         return $this->contents;
     }
 }

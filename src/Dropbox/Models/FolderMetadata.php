@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class FolderMetadata extends BaseModel
@@ -37,7 +40,7 @@ class FolderMetadata extends BaseModel
     /**
      * Set if this folder is contained in a shared folder.
      *
-     * @var \Kunnu\Dropbox\Models\FolderSharingInfo
+     * @var FolderSharingInfo
      */
     protected $sharing_info;
 
@@ -51,8 +54,6 @@ class FolderMetadata extends BaseModel
 
     /**
      * Create a new FolderMetadata instance
-     *
-     * @param array $data
      */
     public function __construct(array $data)
     {
@@ -113,7 +114,7 @@ class FolderMetadata extends BaseModel
     /**
      * Get the 'sharing_info' property of the folder model.
      *
-     * @return \Kunnu\Dropbox\Models\FolderSharingInfo
+     * @return FolderSharingInfo
      */
     public function getSharingInfo()
     {

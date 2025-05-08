@@ -1,31 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox;
 
 use Kunnu\Dropbox\Exceptions\DropboxClientException;
 
 class DropboxResponse
 {
-    /**
-     *  The HTTP status code response
-     *
-     * @var int
-     */
-    protected $httpStatusCode;
-
-    /**
-     *  The headers returned
-     *
-     * @var array
-     */
-    protected $headers;
-
-    /**
-     *  The raw body of the response
-     *
-     * @var string
-     */
-    protected $body;
-
     /**
      *  The decoded body of the response
      *
@@ -34,32 +16,36 @@ class DropboxResponse
     protected $decodedBody = [];
 
     /**
-     * The original request that returned this response
-     *
-     * @var DropboxRequest
-     */
-    protected $request;
-
-    /**
      * Create a new DropboxResponse instance
      *
-     * @param DropboxRequest $request
      * @param string|null $body
      * @param int|null    $httpStatusCode
-     * @param array       $headers
      */
-    public function __construct(DropboxRequest $request, $body = null, $httpStatusCode = null, array $headers = [])
+    public function __construct(
+        /**
+         * The original request that returned this response
+         */
+        protected DropboxRequest $request,
+        /**
+         *  The raw body of the response
+         */
+        protected $body = null,
+        /**
+         *  The HTTP status code response
+         */
+        protected $httpStatusCode = null,
+        /**
+         *  The headers returned
+         */
+        protected array $headers = []
+    )
     {
-        $this->request = $request;
-        $this->body = $body;
-        $this->httpStatusCode = $httpStatusCode;
-        $this->headers = $headers;
     }
 
     /**
      * @param string $body
      */
-    public function setBody($body)
+    public function setBody($body): void
     {
         $this->body = $body;
     }
@@ -67,15 +53,12 @@ class DropboxResponse
     /**
      * @param int $httpStatusCode
      */
-    public function setHttpStatusCode($httpStatusCode)
+    public function setHttpStatusCode($httpStatusCode): void
     {
         $this->httpStatusCode = $httpStatusCode;
     }
 
-    /**
-     * @param array $headers
-     */
-    public function setHeaders(array $headers)
+    public function setHeaders(array $headers): void
     {
         $this->headers = $headers;
     }
@@ -83,7 +66,7 @@ class DropboxResponse
     /**
      * Get the Request Request
      *
-     * @return \Kunnu\Dropbox\DropboxRequest
+     * @return DropboxRequest
      */
     public function getRequest()
     {
@@ -104,11 +87,11 @@ class DropboxResponse
      * Get the Decoded Body
      *
      * @return array
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
     public function getDecodedBody()
     {
-        if (empty($this->decodedBody) || $this->decodedBody === null) {
+        if ($this->decodedBody === [] || $this->decodedBody === null) {
             //Decode the Response Body
             $this->decodeBody();
         }
@@ -173,7 +156,7 @@ class DropboxResponse
      *
      * @return void
      *
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
     protected function validateResponse()
     {

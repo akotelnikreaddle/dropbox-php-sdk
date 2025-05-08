@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 use DateTime;
@@ -8,10 +11,8 @@ class CopyReference extends BaseModel
 
     /**
      * The expiration date of the copy reference
-     *
-     * @var DateTime
      */
-    protected $expires;
+    protected \DateTime $expires;
 
     /**
      * The copy reference
@@ -23,15 +24,13 @@ class CopyReference extends BaseModel
     /**
      * File or Folder Metadata
      *
-     * @var \Kunnu\Dropbox\Models\FileMetadata|\Kunnu\Dropbox\Models\FolderMetadata
+     * @var FileMetadata|FolderMetadata
      */
     protected $metadata;
 
 
     /**
      * Create a new CopyReference instance
-     *
-     * @param array $data
      */
     public function __construct(array $data)
     {
@@ -65,7 +64,7 @@ class CopyReference extends BaseModel
     /**
      * The metadata for the file/folder
      *
-     * @return \Kunnu\Dropbox\Models\FileMetadata|\Kunnu\Dropbox\Models\FolderMetadata
+     * @return FileMetadata|FolderMetadata
      */
     public function getMetadata()
     {

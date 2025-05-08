@@ -1,5 +1,12 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Http\Clients;
+
+use Psr\Http\Message\StreamInterface;
+use Kunnu\Dropbox\Http\DropboxRawResponse;
+use Kunnu\Dropbox\Exceptions\DropboxClientException;
 
 /**
  * DropboxHttpClientInterface
@@ -11,13 +18,13 @@ interface DropboxHttpClientInterface
      *
      * @param  string $url     URL/Endpoint to send the request to
      * @param  string $method  Request Method
-     * @param  string|resource|\Psr\Http\Message\StreamInterface|null $body Request Body
+     * @param string|resource|StreamInterface|null $body Request Body
      * @param  array  $headers Request Headers
      * @param  array  $options Additional Options
      *
-     * @return \Kunnu\Dropbox\Http\DropboxRawResponse Raw response from the server
+     * @return DropboxRawResponse Raw response from the server
      *
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
     public function send($url, $method, $body, $headers = [], $options = []);
 }

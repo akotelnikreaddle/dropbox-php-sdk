@@ -1,6 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox;
 
+use Kunnu\Dropbox\Exceptions\DropboxClientException;
 use Kunnu\Dropbox\Http\Clients\DropboxHttpClientInterface;
 
 /**
@@ -25,14 +29,12 @@ class DropboxClient
     /**
      * DropboxHttpClientInterface Implementation
      *
-     * @var \Kunnu\Dropbox\Http\Clients\DropboxHttpClientInterface
+     * @var DropboxHttpClientInterface
      */
     protected $httpClient;
 
     /**
      * Create a new DropboxClient instance
-     *
-     * @param DropboxHttpClientInterface $httpClient
      */
     public function __construct(DropboxHttpClientInterface $httpClient)
     {
@@ -43,7 +45,7 @@ class DropboxClient
     /**
      * Get the HTTP Client
      *
-     * @return \Kunnu\Dropbox\Http\Clients\DropboxHttpClientInterface $httpClient
+     * @return DropboxHttpClientInterface $httpClient
      */
     public function getHttpClient()
     {
@@ -53,11 +55,9 @@ class DropboxClient
     /**
      * Set the HTTP Client
      *
-     * @param \Kunnu\Dropbox\Http\Clients\DropboxHttpClientInterface $httpClient
      *
-     * @return \Kunnu\Dropbox\DropboxClient
      */
-    public function setHttpClient(DropboxHttpClientInterface $httpClient)
+    public function setHttpClient(DropboxHttpClientInterface $httpClient): static
     {
         $this->httpClient = $httpClient;
 
@@ -91,7 +91,7 @@ class DropboxClient
      *
      * @return array Authorization Header
      */
-    protected function buildAuthHeader($accessToken = "")
+    protected function buildAuthHeader(string $accessToken = ""): array
     {
         return ['Authorization' => 'Bearer '. $accessToken];
     }
@@ -103,7 +103,7 @@ class DropboxClient
      *
      * @return array Content Type Header
      */
-    protected function buildContentTypeHeader($contentType = "")
+    protected function buildContentTypeHeader($contentType = ""): array
     {
         return ['Content-Type' => $contentType];
     }
@@ -118,7 +118,7 @@ class DropboxClient
      *
      * @return string The Full URL to the API Endpoints
      */
-    protected function buildUrl($endpoint = '', $type = 'api')
+    protected function buildUrl(string $endpoint = '', $type = 'api'): string
     {
         //Get the base path
         $base = $this->getBasePath();
@@ -136,20 +136,18 @@ class DropboxClient
     /**
      * Send the Request to the Server and return the Response
      *
-     * @param  DropboxRequest $request
-     * @param  DropboxResponse $response
      *
-     * @return \Kunnu\Dropbox\DropboxResponse
+     * @return DropboxResponse
      *
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
-    public function sendRequest(DropboxRequest $request, DropboxResponse $response = null)
+    public function sendRequest(DropboxRequest $request, ?DropboxResponse $response = null)
     {
         //Method
         $method = $request->getMethod();
 
         //Prepare Request
-        list($url, $headers, $requestBody) = $this->prepareRequest($request);
+        [$url, $headers, $requestBody] = $this->prepareRequest($request);
 
         $options = [];
         if ($response instanceof DropboxResponseToFile) {
@@ -175,11 +173,10 @@ class DropboxClient
     /**
      * Prepare a Request before being sent to the HTTP Client
      *
-     * @param  \Kunnu\Dropbox\DropboxRequest $request
      *
      * @return array [Request URL, Request Headers, Request Body]
      */
-    protected function prepareRequest(DropboxRequest $request)
+    protected function prepareRequest(DropboxRequest $request): array
     {
         //Build URL
         $url = $this->buildUrl($request->getEndpoint(), $request->getEndpointType());

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Authentication;
 
 use Kunnu\Dropbox\Models\AccessToken;
@@ -16,54 +19,36 @@ class DropboxAuthHelper
     const CSRF_LENGTH = 32;
 
     /**
-     * OAuth2 Client
-     *
-     * @var \Kunnu\Dropbox\Authentication\OAuth2Client
-     */
-    protected $oAuth2Client;
-
-    /**
-     * Random String Generator
-     *
-     * @var \Kunnu\Dropbox\Security\RandomStringGeneratorInterface
-     */
-    protected $randomStringGenerator;
-
-    /**
-     * Persistent Data Store
-     *
-     * @var \Kunnu\Dropbox\Store\PersistentDataStoreInterface
-     */
-    protected $persistentDataStore;
-
-    /**
      * Additional User Provided State
      *
      * @var string
      */
-    protected $urlState = null;
+    protected $urlState;
 
     /**
      * Create a new DropboxAuthHelper instance
-     *
-     * @param \Kunnu\Dropbox\Authentication\OAuth2Client             $oAuth2Client
-     * @param \Kunnu\Dropbox\Security\RandomStringGeneratorInterface $randomStringGenerator
-     * @param \Kunnu\Dropbox\Store\PersistentDataStoreInterface      $persistentDataStore
      */
     public function __construct(
-        OAuth2Client $oAuth2Client,
-        RandomStringGeneratorInterface $randomStringGenerator = null,
-        PersistentDataStoreInterface $persistentDataStore = null
-    ) {
-        $this->oAuth2Client = $oAuth2Client;
-        $this->randomStringGenerator = $randomStringGenerator;
-        $this->persistentDataStore = $persistentDataStore;
+        /**
+         * OAuth2 Client
+         */
+        protected OAuth2Client $oAuth2Client,
+        /**
+         * Random String Generator
+         */
+        protected ?RandomStringGeneratorInterface $randomStringGenerator = null,
+        /**
+         * Persistent Data Store
+         */
+        protected ?PersistentDataStoreInterface $persistentDataStore = null
+    )
+    {
     }
 
     /**
      * Get OAuth2Client
      *
-     * @return \Kunnu\Dropbox\Authentication\OAuth2Client
+     * @return OAuth2Client
      */
     public function getOAuth2Client()
     {
@@ -73,7 +58,7 @@ class DropboxAuthHelper
     /**
      * Get the Random String Generator
      *
-     * @return \Kunnu\Dropbox\Security\RandomStringGeneratorInterface
+     * @return RandomStringGeneratorInterface
      */
     public function getRandomStringGenerator()
     {
@@ -83,7 +68,7 @@ class DropboxAuthHelper
     /**
      * Get the Persistent Data Store
      *
-     * @return \Kunnu\Dropbox\Store\PersistentDataStoreInterface
+     * @return PersistentDataStoreInterface
      */
     public function getPersistentDataStore()
     {
@@ -148,10 +133,8 @@ class DropboxAuthHelper
      * Decode State to get the CSRF Token and the URL State
      *
      * @param  string $state State
-     *
-     * @return array
      */
-    protected function decodeState($state)
+    protected function decodeState($state): array
     {
         $csrfToken = $state;
         $urlState = null;
@@ -199,10 +182,9 @@ class DropboxAuthHelper
      * @param  string $state CSRF & URL State
      * @param  string $redirectUri Redirect URI used while getAuthUrl
      *
-     * @return \Kunnu\Dropbox\Models\AccessToken
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
-    public function getAccessToken($code, $state = null, $redirectUri = null)
+    public function getAccessToken($code, $state = null, $redirectUri = null): AccessToken
     {
         // No state provided
         // Should probably be
@@ -231,10 +213,10 @@ class DropboxAuthHelper
     /**
      * Get new Access Token by using the refresh token
      *
-     * @param \Kunnu\Dropbox\Models\AccessToken $accessToken - Current access token object
+     * @param AccessToken $accessToken - Current access token object
      * @param string $grantType ['refresh_token']
      */
-    public function getRefreshedAccessToken($accessToken, $grantType = 'refresh_token')
+    public function getRefreshedAccessToken($accessToken, $grantType = 'refresh_token'): AccessToken
     {
         $newToken = $this->getOAuth2Client()->getAccessToken($accessToken->refresh_token, null, $grantType);
 
@@ -249,10 +231,9 @@ class DropboxAuthHelper
     /**
      * Revoke Access Token
      *
-     * @return void
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
-    public function revokeAccessToken()
+    public function revokeAccessToken(): void
     {
         $this->getOAuth2Client()->revokeAccessToken();
     }

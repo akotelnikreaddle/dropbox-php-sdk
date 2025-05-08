@@ -1,33 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox;
 
 class DropboxApp
 {
-
-    /**
-     * The Client ID of the App
-     *
-     * @link https://www.dropbox.com/developers/apps
-     *
-     * @var string
-     */
-    protected $clientId;
-
-    /**
-     * The Client Secret of the App
-     *
-     * @link https://www.dropbox.com/developers/apps
-     *
-     * @var string
-     */
-    protected $clientSecret;
-
-    /**
-     * The Access Token
-     *
-     * @var string
-     */
-    protected $accessToken;
 
     /**
      * Create a new Dropbox instance
@@ -36,11 +14,25 @@ class DropboxApp
      * @param string $clientSecret Application Client Secret
      * @param string $accessToken  Access Token
      */
-    public function __construct($clientId, $clientSecret, $accessToken = null)
+    public function __construct(
+        /**
+         * The Client ID of the App
+         *
+         * @link https://www.dropbox.com/developers/apps
+         */
+        protected $clientId,
+        /**
+         * The Client Secret of the App
+         *
+         * @link https://www.dropbox.com/developers/apps
+         */
+        protected $clientSecret,
+        /**
+         * The Access Token
+         */
+        protected $accessToken = null
+    )
     {
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-        $this->accessToken = $accessToken;
     }
 
     /**

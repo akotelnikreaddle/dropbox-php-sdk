@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Security;
 
 trait RandomStringGeneratorTrait
@@ -10,10 +13,8 @@ trait RandomStringGeneratorTrait
      * @param int    $length     The length of the string to return.
      *
      * @throws \RuntimeException Throws an exception when multibyte support is not enabled
-     *
-     * @return string
      */
-    public function binToHex($binaryData, $length)
+    public function binToHex($binaryData, $length): string
     {
         return substr(bin2hex($binaryData), 0, $length);
     }

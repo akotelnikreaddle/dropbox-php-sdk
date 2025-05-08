@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class SearchResults extends MetadataCollection
@@ -32,6 +35,7 @@ class SearchResults extends MetadataCollection
      *
      * @return void
      */
+    #[\Override]
     protected function processItems(array $items)
     {
         $processedItems = [];

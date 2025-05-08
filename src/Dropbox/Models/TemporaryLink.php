@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class TemporaryLink extends BaseModel
@@ -14,15 +17,13 @@ class TemporaryLink extends BaseModel
     /**
      * File Metadata
      *
-     * @var \Kunnu\Dropbox\Models\FileMetadata
+     * @var FileMetadata
      */
     protected $metadata;
 
 
     /**
      * Create a new TemporaryLink instance
-     *
-     * @param array $data
      */
     public function __construct(array $data)
     {
@@ -45,7 +46,7 @@ class TemporaryLink extends BaseModel
     /**
      * The metadata for the file
      *
-     * @return \Kunnu\Dropbox\Models\FileMetadata
+     * @return FileMetadata
      */
     public function getMetadata()
     {

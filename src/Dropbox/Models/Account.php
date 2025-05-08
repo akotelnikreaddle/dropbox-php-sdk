@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class Account extends BaseModel
@@ -12,10 +15,8 @@ class Account extends BaseModel
 
     /**
      * User name details
-     *
-     * @var array
      */
-    protected $name = [];
+    protected array $name;
 
     /**
      * Account Email
@@ -82,8 +83,6 @@ class Account extends BaseModel
 
     /**
      * Create a new Account instance
-     *
-     * @param array $data
      */
     public function __construct(array $data)
     {
@@ -103,7 +102,7 @@ class Account extends BaseModel
         //Account Type
         $account_type = $this->getDataProperty('account_type');
 
-        if (is_array($account_type) && !empty($account_type)) {
+        if (is_array($account_type) && $account_type !== []) {
             $this->account_type = $account_type['.tag'];
         }
     }
@@ -137,11 +136,7 @@ class Account extends BaseModel
     {
         $name = $this->name;
 
-        if (isset($name['display_name'])) {
-            return $name['display_name'];
-        }
-
-        return "";
+        return $name['display_name'] ?? "";
     }
 
     /**
@@ -156,12 +151,10 @@ class Account extends BaseModel
 
     /**
      * Whether account email is verified
-     *
-     * @return boolean
      */
-    public function emailIsVerified()
+    public function emailIsVerified(): bool
     {
-        return $this->email_verified ? true : false;
+        return $this->email_verified;
     }
 
     /**
@@ -176,12 +169,10 @@ class Account extends BaseModel
 
     /**
      * Whether acocunt has been disabled
-     *
-     * @return boolean
      */
-    public function isDisabled()
+    public function isDisabled(): bool
     {
-        return $this->disabled ? true : false;
+        return $this->disabled;
     }
 
     /**
@@ -216,12 +207,10 @@ class Account extends BaseModel
 
     /**
      * Whether work account is paired
-     *
-     * @return boolean
      */
-    public function isPaired()
+    public function isPaired(): bool
     {
-        return $this->is_paired ? true : false;
+        return $this->is_paired;
     }
 
     /**

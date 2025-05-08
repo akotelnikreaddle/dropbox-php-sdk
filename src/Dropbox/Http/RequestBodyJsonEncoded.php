@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Http;
 
 /**
@@ -8,20 +11,12 @@ class RequestBodyJsonEncoded implements RequestBodyInterface
 {
 
     /**
-     * Request Params
-     *
-     * @var array
-     */
-    protected $params;
-
-    /**
      * Create a new RequestBodyJsonEncoded instance
      *
      * @param array $params Request Params
      */
-    public function __construct(array $params = [])
+    public function __construct(protected array $params = [])
     {
-        $this->params = $params;
     }
 
     /**
@@ -32,7 +27,7 @@ class RequestBodyJsonEncoded implements RequestBodyInterface
     public function getBody()
     {
         //Empty body
-        if (empty($this->params)) {
+        if ($this->params === []) {
             return null;
         }
 

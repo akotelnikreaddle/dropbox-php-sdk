@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Http\Clients;
 
 use GuzzleHttp\Client;
@@ -18,17 +20,15 @@ class DropboxGuzzleHttpClient implements DropboxHttpClientInterface
 {
     /**
      * GuzzleHttp client.
-     *
-     * @var \GuzzleHttp\Client
      */
-    protected $client;
+    protected Client $client;
 
     /**
      * Create a new DropboxGuzzleHttpClient instance.
      *
      * @param Client $client GuzzleHttp Client
      */
-    public function __construct(Client $client = null)
+    public function __construct(?Client $client = null)
     {
         //Set the client
         $this->client = $client ?: new Client();
@@ -43,11 +43,11 @@ class DropboxGuzzleHttpClient implements DropboxHttpClientInterface
      * @param  array  $headers Request Headers
      * @param  array  $options Additional Options
      *
-     * @return \Kunnu\Dropbox\Http\DropboxRawResponse Raw response from the server
+     * @return DropboxRawResponse Raw response from the server
      *
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
-    public function send($url, $method, $body, $headers = [], $options = [])
+    public function send($url, $method, $body, $headers = [], $options = []): DropboxRawResponse
     {
         //Create a new Request Object
         $request = new Request($method, $url, $headers, $body);
@@ -56,7 +56,7 @@ class DropboxGuzzleHttpClient implements DropboxHttpClientInterface
             //Send the Request
             $rawResponse = $this->client->send($request, $options);
         } catch (BadResponseException $e) {
-            throw new DropboxClientException($e->getResponse()->getBody(), $e->getCode(), $e);
+            throw new DropboxClientException($e->getResponse()->getBody()->getContents(), $e->getCode(), $e);
         } catch (RequestException $e) {
             $rawResponse = $e->getResponse();
 
@@ -67,7 +67,7 @@ class DropboxGuzzleHttpClient implements DropboxHttpClientInterface
 
         //Something went wrong
         if ($rawResponse->getStatusCode() >= 400) {
-            throw new DropboxClientException($rawResponse->getBody());
+            throw new DropboxClientException($rawResponse->getBody()->getContents());
         }
 
         if (array_key_exists('sink', $options)) {
@@ -88,11 +88,9 @@ class DropboxGuzzleHttpClient implements DropboxHttpClientInterface
     /**
      * Get the Response Body.
      *
-     * @param string|\Psr\Http\Message\ResponseInterface $response Response object
-     *
-     * @return string
+     * @param string|ResponseInterface $response Response object
      */
-    protected function getResponseBody($response)
+    protected function getResponseBody($response): string
     {
         //Response must be string
         $body = $response;

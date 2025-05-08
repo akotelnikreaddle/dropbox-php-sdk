@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Http;
 
 /**
@@ -6,20 +9,6 @@ namespace Kunnu\Dropbox\Http;
  */
 class DropboxRawResponse
 {
-    /**
-     * Response headers
-     *
-     * @var array
-     */
-    protected $headers;
-
-    /**
-     * Raw response body
-     *
-     * @var string
-     */
-    protected $body;
-
     /**
      * HTTP status response code
      *
@@ -34,13 +23,17 @@ class DropboxRawResponse
      * @param string    $body           Raw response body
      * @param int|null  $statusCode     HTTP response code
      */
-    public function __construct($headers, $body, $statusCode = null)
+    public function __construct(/**
+     * Response headers
+     */
+    protected $headers, /**
+     * Raw response body
+     */
+    protected $body, $statusCode = null)
     {
         if (is_numeric($statusCode)) {
             $this->httpResponseCode = (int) $statusCode;
         }
-        $this->headers = $headers;
-        $this->body = $body;
     }
 
     /**

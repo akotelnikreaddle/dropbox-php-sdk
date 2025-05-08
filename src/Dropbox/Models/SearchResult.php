@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class SearchResult extends BaseModel
@@ -9,26 +12,24 @@ class SearchResult extends BaseModel
      *
      * @var string
      */
-    protected $matchType = null;
+    protected $matchType;
 
     /**
      * File\Folder Metadata
      *
-     * @var \Kunnu\Dropbox\Models\FileMetadata|\Kunnu\Dropbox\Models\FolderMetadata
+     * @var FileMetadata|FolderMetadata
      */
     protected $metadata;
 
 
     /**
      * Create a new SearchResult instance
-     *
-     * @param array $data
      */
     public function __construct(array $data)
     {
         parent::__construct($data);
         $matchType = $this->getDataProperty('match_type');
-        $this->matchType = isset($matchType['.tag']) ? $matchType['.tag'] : null;
+        $this->matchType = $matchType['.tag'] ?? null;
         $this->setMetadata();
     }
 
@@ -59,7 +60,7 @@ class SearchResult extends BaseModel
     /**
      * Get the Search Result Metadata
      *
-     * @return \Kunnu\Dropbox\Models\FileMetadata|\Kunnu\Dropbox\Models\FolderMetadata
+     * @return FileMetadata|FolderMetadata
      */
     public function getMetadata()
     {

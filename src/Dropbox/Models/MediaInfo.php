@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class MediaInfo extends BaseModel
@@ -15,15 +18,13 @@ class MediaInfo extends BaseModel
     /**
      * MediaMetadata
      *
-     * @var \Kunnu\Dropbox\Models\MediaMetadata
+     * @var MediaMetadata
      */
     protected $mediaMetadata;
 
 
     /**
      * Create a new MediaInfo instance
-     *
-     * @param array $data
      */
     public function __construct(array $data)
     {
@@ -66,7 +67,7 @@ class MediaInfo extends BaseModel
     /**
      * The metadata for the photo/video.
      *
-     * @return \Kunnu\Dropbox\Models\MediaMetadata
+     * @return MediaMetadata
      */
     public function getMediaMetadata()
     {

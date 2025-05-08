@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 use DateTime;
@@ -8,17 +11,13 @@ class MediaMetadata extends BaseModel
 
     /**
      * The GPS coordinate of the photo/video.
-     *
-     * @var array
      */
-    protected $location = array();
+    protected array $location;
 
     /**
      * Dimension of the photo/video.
-     *
-     * @var array
      */
-    protected $dimensions = array();
+    protected array $dimensions;
 
     /**
      * The timestamp when the photo/video is taken.
@@ -30,8 +29,6 @@ class MediaMetadata extends BaseModel
 
     /**
      * Create a new MediaMetadata instance
-     *
-     * @param array $data
      */
     public function __construct(array $data)
     {

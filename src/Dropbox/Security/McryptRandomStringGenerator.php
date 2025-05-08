@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Security;
 
 use Kunnu\Dropbox\Exceptions\DropboxClientException;
@@ -20,7 +23,7 @@ class McryptRandomStringGenerator implements RandomStringGeneratorInterface
     /**
      * Create a new McryptRandomStringGenerator instance
      *
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
     public function __construct()
     {
@@ -37,7 +40,7 @@ class McryptRandomStringGenerator implements RandomStringGeneratorInterface
      *
      * @param  int $length Length of the string to return
      *
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      *
      * @return string
      */

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Models;
 
 class VideoMetadata extends MediaMetadata
@@ -13,8 +16,6 @@ class VideoMetadata extends MediaMetadata
 
     /**
      * Create a new VideoMetadata instance
-     *
-     * @param array $data
      */
     public function __construct(array $data)
     {

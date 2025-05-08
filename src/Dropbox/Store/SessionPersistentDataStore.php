@@ -1,24 +1,24 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Store;
 
 class SessionPersistentDataStore implements PersistentDataStoreInterface
 {
 
     /**
-     * Session Variable Prefix
-     *
-     * @var string
-     */
-    protected $prefix;
-
-    /**
      * Create a new SessionPersistentDataStore instance
      *
      * @param string $prefix Session Variable Prefix
      */
-    public function __construct($prefix = "DBAPI_")
+    public function __construct(
+        /**
+         * Session Variable Prefix
+         */
+        protected $prefix = "DBAPI_"
+    )
     {
-        $this->prefix = $prefix;
     }
 
     /**
@@ -30,21 +30,15 @@ class SessionPersistentDataStore implements PersistentDataStoreInterface
      */
     public function get($key)
     {
-        if (isset($_SESSION[$this->prefix . $key])) {
-            return $_SESSION[$this->prefix . $key];
-        }
-
-        return null;
+        return $_SESSION[$this->prefix . $key] ?? null;
     }
 
     /**
      * Set a value in the store
      * @param string $key   Data Key
      * @param string $value Data Value
-     *
-     * @return void
      */
-    public function set($key, $value)
+    public function set($key, $value): void
     {
         $_SESSION[$this->prefix . $key] = $value;
     }
@@ -52,11 +46,9 @@ class SessionPersistentDataStore implements PersistentDataStoreInterface
     /**
      * Clear the key from the store
      *
-     * @param $key Data Key
-     *
-     * @return void
+     * @param string $key Data Key
      */
-    public function clear($key)
+    public function clear($key): void
     {
         if (isset($_SESSION[$this->prefix . $key])) {
             unset($_SESSION[$this->prefix . $key]);

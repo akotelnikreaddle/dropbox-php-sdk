@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Security;
 
 use InvalidArgumentException;
@@ -14,11 +17,11 @@ class RandomStringGeneratorFactory
     /**
      * Make a Random String Generator
      *
-     * @param  null|string|\Kunnu\Dropbox\Security\RandomStringGeneratorInterface $generator
+     * @param null|string|RandomStringGeneratorInterface $generator
      *
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      *
-     * @return \Kunnu\Dropbox\Security\RandomStringGeneratorInterface
+     * @return RandomStringGeneratorInterface
      */
     public static function makeRandomStringGenerator($generator = null)
     {
@@ -50,14 +53,14 @@ class RandomStringGeneratorFactory
     /**
      * Get Default Random String Generator
      *
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      *
      * @return RandomStringGeneratorInterface
      */
-    protected static function defaultRandomStringGenerator()
+    protected static function defaultRandomStringGenerator(): McryptRandomStringGenerator|OpenSslRandomStringGenerator
     {
         //Mcrypt
-        if (function_exists('mcrypt_create_iv') && version_compare(PHP_VERSION, '7.1', '<')) {
+        if (function_exists('mcrypt_create_iv') && PHP_VERSION_ID < 70100) {
             return new McryptRandomStringGenerator();
         }
 

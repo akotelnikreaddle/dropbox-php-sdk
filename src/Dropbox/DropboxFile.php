@@ -1,7 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox;
 
+use GuzzleHttp\Psr7\Utils;
+use GuzzleHttp\Psr7\Stream;
+use GuzzleHttp\Psr7\MimeType;
 use Kunnu\Dropbox\Exceptions\DropboxClientException;
 
 /**
@@ -9,64 +14,51 @@ use Kunnu\Dropbox\Exceptions\DropboxClientException;
  */
 class DropboxFile
 {
-    const MODE_READ = 'r';
+    const string MODE_READ = 'r';
 
-    const MODE_WRITE = 'w';
-
-    /**
-     * Path of the file to upload
-     *
-     * @var string
-     */
-    protected $path;
+    const string MODE_WRITE = 'w';
 
     /**
      * The maximum bytes to read. Defaults to -1 (read all the remaining buffer).
-     *
-     * @var int
      */
-    protected $maxLength = -1;
+    protected int $maxLength = -1;
 
     /**
      * Seek to the specified offset before reading.
      * If this number is negative, no seeking will
      * occur and reading will start from the current.
-     *
-     * @var int
      */
-    protected $offset = -1;
+    protected int $offset = -1;
 
     /**
      * File Stream
      *
-     * @var \GuzzleHttp\Psr7\Stream
+     * @var Stream
      */
     protected $stream;
 
     /**
-     * The type of access
-     *
-     * @var string
-     */
-    protected $mode;
-
-    /**
      * Flag to see if we created an instance using a stream
-     *
-     * @var bool
      */
-    private $isStream = false;
+    private bool $isStream = false;
 
     /**
      * Create a new DropboxFile instance
      *
-     * @param string $filePath Path of the file to upload
+     * @param string $path Path of the file to upload
      * @param string $mode     The type of access
      */
-    public function __construct($filePath, $mode = self::MODE_READ)
+    public function __construct(
+        /**
+         * Path of the file to upload
+         */
+        protected $path,
+        /**
+         * The type of access
+         */
+        protected $mode = self::MODE_READ
+    )
     {
-        $this->path = $filePath;
-        $this->mode = $mode;
     }
 
     /**
@@ -76,13 +68,12 @@ class DropboxFile
      * @param        $resource
      * @param string $mode
      *
-     * @return DropboxFile
      * @throws DropboxClientException
      */
-    public static function createByStream($fileName, $resource, $mode = self::MODE_READ)
+    public static function createByStream($fileName, $resource, $mode = self::MODE_READ): self
     {
         // create a new stream and set it to the dropbox file
-        $stream = \GuzzleHttp\Psr7\Utils::streamFor($resource);
+        $stream = Utils::streamFor($resource);
         if (!$stream) {
             throw new DropboxClientException('Failed to create DropboxFile instance. Unable to open the given resource.');
         }
@@ -109,10 +100,8 @@ class DropboxFile
      *
      * @param $filePath
      * @param $mode
-     *
-     * @return DropboxFile
      */
-    public static function createByPath($filePath, $mode)
+    public static function createByPath($filePath, $mode): self
     {
         return new self($filePath, $mode);
     }
@@ -128,7 +117,7 @@ class DropboxFile
     /**
      * Close the file stream
      */
-    public function close()
+    public function close(): void
     {
         if ($this->stream) {
             $this->stream->close();
@@ -141,7 +130,7 @@ class DropboxFile
      *
      * @param int $offset
      */
-    public function setOffset($offset)
+    public function setOffset($offset): void
     {
         $this->offset = $offset;
     }
@@ -152,7 +141,7 @@ class DropboxFile
      *
      * @param int $maxLength
      */
-    public function setMaxLength($maxLength)
+    public function setMaxLength($maxLength): void
     {
         $this->maxLength = $maxLength;
     }
@@ -160,10 +149,9 @@ class DropboxFile
     /**
      * Return the contents of the file
      *
-     * @return string
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
-    public function getContents()
+    public function getContents(): string
     {
         $stream = $this->getStream();
         // If an offset is provided
@@ -184,14 +172,15 @@ class DropboxFile
     /**
      * Get the Open File Stream
      *
-     * @return \GuzzleHttp\Psr7\Stream
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @return Stream
+     * @throws DropboxClientException
      */
     public function getStream()
     {
         if (!$this->stream) {
             $this->open();
         }
+
         return $this->stream;
     }
 
@@ -200,7 +189,7 @@ class DropboxFile
      *
      * @param $stream
      */
-    public function setStream($stream)
+    public function setStream($stream): void
     {
         $this->isStream = true;
         $this->stream = $stream;
@@ -210,10 +199,8 @@ class DropboxFile
      * Opens the File Stream
      *
      * @throws DropboxClientException
-     *
-     * @return void
      */
-    public function open()
+    public function open(): void
     {
         // File was created from a stream so don't open it again
         if ($this->isCreatedFromStream()) {
@@ -234,7 +221,7 @@ class DropboxFile
         }
 
         // Create a stream
-        $this->stream = \GuzzleHttp\Psr7\Utils::streamFor(fopen($this->path, $this->mode));
+        $this->stream = Utils::streamFor(fopen($this->path, $this->mode));
 
         // Unable to create stream
         if (!$this->stream) {
@@ -242,10 +229,7 @@ class DropboxFile
         }
     }
 
-    /**
-     * @return bool
-     */
-    protected function isCreatedFromStream()
+    protected function isCreatedFromStream(): bool
     {
         return $this->stream && $this->isStream === true;
     }
@@ -254,36 +238,26 @@ class DropboxFile
      * Returns true if the path to the file is remote
      *
      * @param string $pathToFile
-     *
-     * @return boolean
      */
-    protected function isRemoteFile($pathToFile)
+    protected function isRemoteFile($pathToFile): bool
     {
         return preg_match('/^(https?|ftp):\/\/.*/', $pathToFile) === 1;
     }
 
-    /**
-     * @return bool
-     */
-    protected function isNotReadable()
+    protected function isNotReadable(): bool
     {
         return self::MODE_READ === $this->mode && !is_readable($this->path);
     }
 
-    /**
-     * @return bool
-     */
-    protected function isNotWritable()
+    protected function isNotWritable(): bool
     {
         return self::MODE_WRITE === $this->mode && file_exists($this->path) && !is_writable($this->path);
     }
 
     /**
      * Get the name of the file
-     *
-     * @return string
      */
-    public function getFileName()
+    public function getFileName(): string
     {
         return basename($this->path);
     }
@@ -317,20 +291,18 @@ class DropboxFile
      * Get the size of the file
      *
      * @return int
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
-    public function getSize()
+    public function getSize(): ?int
     {
         return $this->getStream()->getSize();
     }
 
     /**
      * Get mimetype of the file
-     *
-     * @return string
      */
-    public function getMimetype()
+    public function getMimetype(): string
     {
-        return \GuzzleHttp\Psr7\mimetype_from_filename($this->path) ?: 'text/plain';
+        return MimeType::fromFilename($this->path) ?: 'text/plain';
     }
 }

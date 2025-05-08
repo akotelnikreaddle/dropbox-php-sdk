@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Http;
 
 use Kunnu\Dropbox\DropboxFile;
@@ -10,20 +13,15 @@ class RequestBodyStream implements RequestBodyInterface
 {
 
     /**
-     * File to be sent with the Request
-     *
-     * @var \Kunnu\Dropbox\DropboxFile
-     */
-    protected $file;
-
-    /**
      * Create a new RequestBodyStream instance
-     *
-     * @param \Kunnu\Dropbox\DropboxFile $file
      */
-    public function __construct(DropboxFile $file)
+    public function __construct(
+        /**
+         * File to be sent with the Request
+         */
+        protected DropboxFile $file
+    )
     {
-        $this->file = $file;
     }
 
     /**

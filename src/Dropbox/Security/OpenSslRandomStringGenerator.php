@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Kunnu\Dropbox\Security;
 
 use Kunnu\Dropbox\Exceptions\DropboxClientException;
@@ -20,7 +23,7 @@ class OpenSslRandomStringGenerator implements RandomStringGeneratorInterface
     /**
      * Create a new OpenSslRandomStringGenerator instance
      *
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      */
     public function __construct()
     {
@@ -37,7 +40,7 @@ class OpenSslRandomStringGenerator implements RandomStringGeneratorInterface
      *
      * @param  int $length Length of the string to return
      *
-     * @throws \Kunnu\Dropbox\Exceptions\DropboxClientException
+     * @throws DropboxClientException
      *
      * @return string
      */
@@ -45,7 +48,7 @@ class OpenSslRandomStringGenerator implements RandomStringGeneratorInterface
     {
         $cryptoStrong = false;
         //Create Binary String
-        $binaryString = openssl_random_pseudo_bytes($length, $cryptoStrong);
+        $binaryString = \openssl_random_pseudo_bytes($length, $cryptoStrong);
 
         //Unable to create binary string
         if ($binaryString === false) {

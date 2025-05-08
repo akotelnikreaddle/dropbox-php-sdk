@@ -1,27 +1,33 @@
 <?php
-namespace Kunnu\Dropbox;
 
+namespace Kunnu\Dropbox\Tests;
+
+use Kunnu\Dropbox\DropboxFile;
 use PHPUnit\Framework\TestCase;
 
 class DropboxFileTest extends TestCase
 {
     protected $stream;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->stream = fopen(__FILE__, 'r');
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         fclose($this->stream);
     }
 
+    /**
+     * @covers \Kunnu\Dropbox\DropboxFile::getFilePath
+     * @covers \Kunnu\Dropbox\DropboxFile::getStream
+     * @covers \Kunnu\Dropbox\DropboxFile::isCreatedFromStream
+     */
     public function testGetStreamOrFilePathReturnsStringWhenConstructedNormally()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DropboxFile $dropboxFile */
         $dropboxFile = $this->getMockBuilder(DropboxFile::class)
-            ->setMethods(['getFilePath', 'getStream', 'isCreatedFromStream'])
+            ->onlyMethods(['getFilePath', 'getStream', 'isCreatedFromStream'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -44,11 +50,15 @@ class DropboxFileTest extends TestCase
         self::assertSame('/i/am/a/file', $result);
     }
 
+    /**
+     * @covers \Kunnu\Dropbox\DropboxFile::getFilePath
+     * @covers \Kunnu\Dropbox\DropboxFile::getStream
+     * @covers \Kunnu\Dropbox\DropboxFile::isCreatedFromStream
+     */
     public function testGetStreamOrFilePathReturnsStringWhenConstructedWithStream()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DropboxFile $dropboxFile */
         $dropboxFile = $this->getMockBuilder(DropboxFile::class)
-            ->setMethods(['getFilePath', 'getStream', 'isCreatedFromStream'])
+            ->onlyMethods(['getFilePath', 'getStream', 'isCreatedFromStream'])
             ->disableOriginalConstructor()
             ->getMock();
 
